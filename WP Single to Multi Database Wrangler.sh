@@ -22,51 +22,24 @@ echo "Enter the new site id:";
 read SITE_ID;
 
 # parsing the replacement of the database prefix
-PREFIX_SED="s#";
-PREFIX_SED+=$OLD_DB_PREFIX_SED;
-PREFIX_SED+="#";
-PREFIX_SED+=$MULTISITE_DB_PREFIX_SED;
-PREFIX_SED+=$SITE_ID;
-PREFIX_SED+="_";
-PREFIX_SED+="#g";
-
-sed $PREFIX_SED $DB_FILE > $TEMP_FILE;
+sed s#$OLD_DB_PREFIX_SED#$MULTISITE_DB_PREFIX_SED$SITE_ID_#g $DB_FILE > temp1.txt;
 
 # parsing the replacement of site URL
-URL_SED="s#";
-URL_SED+="https://";
-URL_SED+=$OLD_SUBDOMAIN;
-URL_SED+=".uwosh.edu#http://localhost/";
-URL_SED+=$NEW_HOMEPAGE;
-URL_SED+="#g";
-
-sed $URL_SED $TEMP_FILE > $TEMP_FILE;
+sed s#https://$OLD_SUBDOMAIN.uwosh.edu#http://localhost/$NEW_HOMEPAGE#g temp1.txt > temp2.txt;
 
 # parsing the replacement of the media library URL
-MEDIA_PATH="s#";
-MEDIA_PATH+="wp-content/uploads#wp-content/uploads/sites/";
-MEDIA_PATH+=$SITE_ID;
-MEDIA_PATH+="#g";
-
-sed $MEDIA_PATH $TEMP_FILE > $TEMP_FILE;
+sed s#wp-content/uploads#wp-content/uploads/sites/$SITE_ID#g temp2.txt > temp3.txt;
 
 # setting the upload path back to what it should be
-UPLOAD_PATH="s#";
-UPLOAD_PATH+="\'upload_path\',\ \'wp-content/uploads/sites/";
-UPLOAD_PATH+=$SITE_ID;
-UPLOAD_PATH+="#\'upload_path\',\ \'wp-content/uploads#g";
-
-echo $UPLOAD_PATH;
-
-sed $UPLOAD_PATH $TEMP_FILE > $TEMP_FILE;
+sed s#'upload_path',\ 'wp-content/uploads/sites/$SITE_ID#'upload_path',\ 'wp-content/uploads#g temp3.txt > temp4.txt;
 
 FIXED_DB_FILE="FIXED_";
 FIXED_DB_FILE+=$DB_FILE;
 
 # writing the fixed database back to a file
-cp $TEMP_FILE $FIXED_DB_FILE;
+cat temp4.txt > $FIXED_DB_FILE;
 
-# removing the temp file
-rm $TEMP_FILE;
+# removing all temp files
+rm temp*;
 
 exit 0;
