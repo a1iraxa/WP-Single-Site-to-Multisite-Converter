@@ -1,5 +1,5 @@
 #!/bin/bash
-MULTISITE_DB_PREFIX_SED="wp_7s225g_";
+MULTISITE_DB_PREFIX_SED="t9k3mh8a4p_";
 TEMP_FILE="tmp.txt";
 
 echo "Enter the file of your database:";
