@@ -1,5 +1,5 @@
 #!/bin/bash
-MULTISITE_DB_PREFIX_SED="t9k3mh8a4p_";
+MultisiteDBPrefixSED="t9k3mh8a4p_";
 TEMP_FILE="tmp.txt";
 
 echo "Enter the file of your database:";
@@ -19,13 +19,14 @@ echo "Enter the old database prefix:";
 read OLD_DB_PREFIX_SED;
 
 echo "Enter the new site id:";
-read SITE_ID;
+read SiteID;
+SiteID+="_";
 
 # parsing the replacement of the database prefix
-sed s#$OLD_DB_PREFIX_SED#$MULTISITE_DB_PREFIX_SED$SITE_ID_#g $DB_FILE > temp1.txt;
+sed s#$OLD_DB_PREFIX_SED#$MultisiteDBPrefixSED$SiteID#g $DB_FILE > temp1.txt;
 
 # parsing the replacement of site URL
-sed s#https://$OLD_SUBDOMAIN.uwosh.edu#http://localhost/$NEW_HOMEPAGE#g temp1.txt > temp2.txt;
+sed s#https://$OLD_SUBDOMAIN.uwosh.edu#https://wwwtest.uwosh.edu/$NEW_HOMEPAGE#g temp1.txt > temp2.txt;
 
 # parsing the replacement of the media library URL
 sed s#wp-content/uploads#wp-content/uploads/sites/$SITE_ID#g temp2.txt > temp3.txt;
