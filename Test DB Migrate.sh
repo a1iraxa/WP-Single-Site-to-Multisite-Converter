@@ -20,19 +20,19 @@ read OLD_DB_PREFIX_SED;
 
 echo "Enter the new site id:";
 read SiteID;
-SiteID+="_";
+SiteIDWithUnderscore=$SiteID"_";
 
 # parsing the replacement of the database prefix
-sed s#$OLD_DB_PREFIX_SED#$MultisiteDBPrefixSED$SiteID#g $DB_FILE > temp1.txt;
+sed s#$OLD_DB_PREFIX_SED#$MultisiteDBPrefixSED$SiteIDWithUnderscore#g $DB_FILE > temp1.txt;
 
 # parsing the replacement of site URL
 sed s#https://$OLD_SUBDOMAIN.uwosh.edu#https://wwwtest.uwosh.edu/$NEW_HOMEPAGE#g temp1.txt > temp2.txt;
 
 # parsing the replacement of the media library URL
-sed s#wp-content/uploads#wp-content/uploads/sites/$SITE_ID#g temp2.txt > temp3.txt;
+sed s#wp-content/uploads#wp-content/uploads/sites/$SiteID#g temp2.txt > temp3.txt;
 
 # setting the upload path back to what it should be
-sed s#'upload_path',\ 'wp-content/uploads/sites/$SITE_ID#'upload_path',\ 'wp-content/uploads#g temp3.txt > temp4.txt;
+sed s#'upload_path',\ 'wp-content/uploads/sites/$SiteID#'upload_path',\ 'wp-content/uploads#g temp3.txt > temp4.txt;
 
 FIXED_DB_FILE="FIXED_";
 FIXED_DB_FILE+=$DB_FILE;
